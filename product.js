@@ -41,16 +41,42 @@ const productSchema = new mongoose.Schema({
   },
 });
 
-const Product = mongoose.model("Product", productSchema);
+productSchema.methods.greet = function () {
+  console.log("Hello Hi Howdy!!!");
+  console.log(`- from ${this.name}`);
+};
 
-const bike = new Product({
-  name: "Fishing Rod",
-  price: "200",
-  catagories: ["Sports/Outdoors", "Fishing", "Rods and Reels"],
-  qty: {
-    online: 50,
-  },
-});
+productSchema.methods.toggleOnSale = function () {
+  this.isOnSale = !this.isOnSale;
+  if (this.isOnSale) this.price = this.price * 0.5;
+  else this.price = this.price * 2;
+  return this.save();
+};
+
+productSchema.methods.addCategory = function (newCat) {
+  this.catagories.push(newCat);
+  return this.save();
+};
+
+const Product = mongoose.model("Product", productSchema);
+const findProduct = async () => {
+  const foundProduct = await Product.findOne({ name: "Fishing Rod" });
+  console.log(foundProduct);
+  await foundProduct.toggleOnSale();
+  console.log(foundProduct);
+  await foundProduct.addCategory("Outdoors");
+  console.log(foundProduct);
+};
+
+findProduct();
+// const bike = new Product({
+//   name: "Fishing Rod",
+//   price: "200",
+//   catagories: ["Sports/Outdoors", "Fishing", "Rods and Reels"],
+//   qty: {
+//     online: 50,
+//   },
+// });
 
 // bike
 //   .save()
@@ -63,16 +89,16 @@ const bike = new Product({
 //     console.log(err);
 //   });
 
-Product.findOneAndUpdate(
-  { name: "Fishing Rod" },
-  { price: -100 },
-  { new: true, runValidators: true }
-)
-  .then((data) => {
-    console.log("IT WORKED");
-    console.log(data);
-  })
-  .catch((err) => {
-    console.log("OH NO ERROR!");
-    console.log(err);
-  });
+// Product.findOneAndUpdate(
+//   { name: "Fishing Rod" },
+//   { price: 100 },
+//   { new: true, runValidators: true }
+// )
+//   .then((data) => {
+//     console.log("IT WORKED");
+//     console.log(data);
+//   })
+//   .catch((err) => {
+//     console.log("OH NO ERROR!");
+//     console.log(err);
+//   });
