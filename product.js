@@ -15,24 +15,41 @@ const productSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    maxlength: 20,
   },
   price: {
     type: Number,
     required: true,
+    min: 0,
   },
   isOnSale: {
     type: Boolean,
-    required: true,
+    default: false,
+  },
+  catagories: {
+    type: [String],
+  },
+  qty: {
+    online: {
+      type: Number,
+      default: 0,
+    },
+    inStore: {
+      type: Number,
+      default: 0,
+    },
   },
 });
 
 const Product = mongoose.model("Product", productSchema);
 
 const bike = new Product({
-  name: "Mountain Bike",
-  price: "1000",
-  isOnSale: false,
-  color: "blue",
+  name: "Tent",
+  price: "500",
+  catagories: ["Sports/Outdoors", "Camping", "Tents"],
+  qty: {
+    inStore: 50,
+  },
 });
 
 bike
