@@ -20,7 +20,7 @@ const productSchema = new mongoose.Schema({
   price: {
     type: Number,
     required: true,
-    min: 0,
+    min: [0, "price must be positive dumbass!"],
   },
   isOnSale: {
     type: Boolean,
